@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>TV/Movie Wiki Search</title>
-    <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
-<h1>Subscribe</h1>
-<form action="/results" enctype="multipart/form-data" method="POST">
-    Title: <input type="text" name="title"><br/>
-    <input type="submit" value="Submit">
-</form>
-</body>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>TV/Movie Wiki Search</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+
+    <body>
+        <h1>Search for a TV Show or Movie</h1>
+        <form action="/results" enctype="multipart/form-data" method="POST">
+            Title: <input type="text" name="title">
+            <select>
+                <option value="tv">TV Show</option>
+                <option value="movie">Movie</option>
+            </select>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
 </html>
