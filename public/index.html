@@ -10,10 +10,10 @@
     <body>
         <h1>Search for a TV Show or Movie</h1>
         <form action="/results" enctype="multipart/form-data" method="POST">
-            Title: <input type="text" name="title">
-            <select>
-                <option value="tv">TV Show</option>
-                <option value="movie">Movie</option>
+            Title: <input type="text" name="search">
+            <select name="selection">
+                <option value="Titles">Title</option>
+                <option value="Names">Person</option>
             </select>
             <input type="submit" value="Submit">
         </form>
