@@ -6,6 +6,7 @@ var url = require('url');
 var multiparty = require('multiparty');
 
 var mime = require('./src/mime.js');
+var results = require('./src/results.js');
 
 var port = 8025;
 var public_dir = path.join(__dirname, 'public');
@@ -31,14 +32,16 @@ var server = http.createServer((req, res) => {
         });
     }
     else if (req.method === 'POST'){
-        if (filename === 'subscribe'){
+        if (filename === 'results'){
             var form = new multiparty.Form();
             form.parse(req, (err, fields, files) => {
                 console.log(err, fields, files);
 
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.write('Successfully subscribed');
-            res.end();
+                var response = results.generateResponse(fields);
+
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.write(response);
+                res.end();
             });
         }
     }
