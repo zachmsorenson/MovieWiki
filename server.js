@@ -40,10 +40,16 @@ var server = http.createServer((req, res) => {
 
                 var response = results.generateResponse(fields);
 
+                fs.readFile(path.join(public_dir, "results.html"), (err, data) => {
+                    if (err){
+                        console.log("Error in results: " + err);
+                    } else {
+                        res.writeHead(200, {'Content-Type': 'text/html'});
+                        res.write(data);
+                        res.end();
+                    }
 
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.write(response);
-                res.end();
+                });
             });
         }
     }
