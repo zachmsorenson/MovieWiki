@@ -1,0 +1,8 @@
+{
+  "name": "MovieWiki",
+  "version": "0.0.1",
+  "dependencies": {
+    "multiparty": "latest",
+    "sqlite3": "3.1.x"
+  }
+}

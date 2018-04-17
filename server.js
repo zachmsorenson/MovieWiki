@@ -4,6 +4,7 @@ var http = require('http');
 var url = require('url');
 
 var multiparty = require('multiparty');
+var sqlite3 = require('sqlite3');
 
 var mime = require('./src/mime.js');
 var results = require('./src/results.js');
@@ -38,6 +39,7 @@ var server = http.createServer((req, res) => {
                 console.log(err, fields, files);
 
                 var response = results.generateResponse(fields);
+
 
                 res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(response);

@@ -1,4 +1,5 @@
 // Parse POST message, query database, generate HTML to send back
+var sqlite3 = require('sqlite3');
 
 function generateResponse(fields){
     // value from search box and drop down
@@ -21,7 +22,9 @@ function generateResponse(fields){
     ////////////////////////
     // QUERY DATABASE HERE
     ////////////////////////
-
+    var db = new sqlite3.Database("imdb.sqlite3");
+    var results = db.get(query);
+    console.log(results);
 
     ////////////////////////////////////
     // 1) Dynamically create entire html as string
