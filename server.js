@@ -7,7 +7,7 @@ var multiparty = require('multiparty');
 var sqlite3 = require('sqlite3');
 
 var mime = require('./src/mime.js');
-var results = require('./src/results.js');
+var querySearch = require('./src/querySearch.js');
 
 var port = 8025;
 var public_dir = path.join(__dirname, 'public');
@@ -33,17 +33,24 @@ var server = http.createServer((req, res) => {
         });
     }
     else if (req.method === 'POST'){
-        if (filename === 'results'){
+        if (filename === 'searchResults'){
+            // this is a submission for query results - send back an object
             var form = new multiparty.Form();
             form.parse(req, (err, fields, files) => {
-                console.log(err, fields, files);
+                //console.log(err, fields, files);
 
-                var response = results.generateResponse(fields);
+                // function call to query database
+                var promise = new Promise((resolve, reject) => {
+                    querySearch.generateResponse(fields, resolve);
+                });
 
-
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.write(response);
-                res.end();
+                promise.then(function(response) {
+                    // respond with JSON of data
+                    console.log(response);
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    res.write(JSON.stringify(response));
+                    res.end();
+                });
             });
         }
     }

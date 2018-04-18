@@ -5,8 +5,10 @@
     <title>Results</title>
 </head>
 <body>
-    <div>
-        <a>test</a>
+    <div id="resultsContainer" ng-app="resultsApp" ng-controller="resultsController">
+        <ul id="resultsList" ng-repeat="for result in results">
+            <li>{{result}}</li>
+        </ul>
     </div>
 </body>
 </html>
