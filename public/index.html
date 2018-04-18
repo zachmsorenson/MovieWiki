@@ -8,19 +8,25 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-
-        <script src="main.js"></script>
+        <script src="listResults.js"></script>
     </head>
 
     <body>
-        <h1>Search for a TV Show or Movie</h1>
-        <form action="/results" enctype="multipart/form-data" method="POST">
-            Title: <input type="text" name="search">
-            <select name="selection">
-                <option value="Titles">Title</option>
-                <option value="Names">Person</option>
-            </select>
-            <input type="submit" value="Submit">
-        </form>
+        <div id="header">
+            <h1>Search for a TV Show or Movie</h1>
+            <form action="/searchResults" enctype="multipart/form-data" method="POST">
+                Title: <input type="text" name="search">
+                <select name="selection">
+                    <option value="Titles">Title</option>
+                    <option value="Names">Person</option>
+                </select>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        <div id="resultsContainer" ng-app="resultsApp" ng-controller="resultsController">
+            <ul id="resultsList" ng-repeat="for result in results">
+                <li>{{result}}</li>
+            </ul>
+        </div>
     </body>
 </html>

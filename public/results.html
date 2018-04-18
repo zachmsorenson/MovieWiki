@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Results</title>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 </head>
 <body>
-    <div id="resultsList" ng-app="resultsApp" ng-controller="resultsController">
-        <ul ng-repeat="for result in results">
-            <li>{{ result }}</li>
+    <div id="resultsContainer" ng-app="resultsApp" ng-controller="resultsController">
+        <ul id="resultsList" ng-repeat="for result in results">
+            <li>{{result}}</li>
         </ul>
     </div>
 </body>
