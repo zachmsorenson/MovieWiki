@@ -1,60 +1,88 @@
-var fs = require('fs');
-var path = require('path');
-var http = require('http');
+var express = require('express');
+
 var url = require('url');
+var fs = require('fs');
+var exec = require('child_process').exec;
 
-var multiparty = require('multiparty');
-var sqlite3 = require('sqlite3');
-
-var mime = require('./src/mime.js');
 var querySearch = require('./src/querySearch.js');
+var queryTitles = require('./src/queryTitles.js');
+var queryNames = require('./src/queryNames.js');
 
+var app = express();
 var port = 8025;
-var public_dir = path.join(__dirname, 'public');
 
-var server = http.createServer((req, res) => {
+app.get('/', (req, res) => { //request to index page
     var req_url = url.parse(req.url);
-    var filename = req_url.pathname.substring(1);
-    if (filename === '') filename = 'index.html';
+    console.log(req_url);
+    fs.readFile('public/index.html', (err, data) => {
+        if (err) {
+            res.writeHead(404, {'Content-Type': 'text/plain'});
+            res.write('Could not find file!');
+            res.end();
+        } else {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write(data);
+            res.end();
+        }
+    });
+});
 
-    if (req.method === 'GET'){
-        fs.readFile(path.join(public_dir, filename), (err, data) => {
+app.get('/search', (req, res) => { //request to search page
+    console.log(req.url);
+    var req_url = url.parse(req.url);
+    var selection = req.query.selection;
+    var search = req.query.search || ""; // if search empty default to empty string
+
+    if (!(selection)) { // query not specified
+        fs.readFile('public/searchResults.html', (err, data) => {
             if (err) {
                 res.writeHead(404, {'Content-Type': 'text/plain'});
-                res.write('File not found');
+                res.write('Could not find file!');
                 res.end();
-            }
-            else {
-                var ext = path.extname(filename).substring(1);
-                res.writeHead(202, {'Content-Type': mime.mime_types[ext] || 'text/plain'});
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(data);
                 res.end();
             }
         });
-    }
-    else if (req.method === 'POST'){
-        if (filename === 'searchResults'){
-            // this is a submission for query results - send back an object
-            var form = new multiparty.Form();
-            form.parse(req, (err, fields, files) => {
-                //console.log(err, fields, files);
-
-                // function call to query database
-                var promise = new Promise((resolve, reject) => {
-                    querySearch.generateResponse(fields, resolve);
-                });
-
-                promise.then(function(response) {
-                    // respond with JSON of data
-                    console.log(response);
-                    res.writeHead(200, {'Content-Type': 'application/json'});
-                    res.write(JSON.stringify(response));
+    } else { // do query, serve dynamic html
+        fs.readFile('public/searchResults.html', (err, data) => {
+            querySearch.generateResponse(data, search, selection)
+                .then(data => {
+                    // successfully queried data and received templated html - return data
+                    res.writeHead(200, {'Content-Type': 'text/html'});
+                    res.write(data);
                     res.end();
-                });
-            });
-        }
+                })
+                .catch(error => console.log(error));
+
+
+
+            //console.log(html);
+        });
     }
 });
 
-console.log('Listening on port ' + port);
-server.listen(port, '0.0.0.0');
+app.get('/titles', (req, res) => {
+    var req_url = url.parse(req.url);
+    var id = req.query.id || "";
+
+    if (!(id)) { // no id specified
+
+    } else { // given id - do query and send back result
+
+    }
+});
+
+app.get('/people', (req, res) => {
+    var req_url = url.parse(req.url);
+    var id = req.query.id || "";
+
+    if (!(id)) { // no id specified
+
+    } else { // given id - do query and send back result
+
+    }
+});
+
+app.listen(port);
