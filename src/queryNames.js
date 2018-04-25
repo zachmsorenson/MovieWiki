@@ -23,25 +23,49 @@ function generateResponse(html, id) {
                 reject(err);
             } else {
                 // on query success -> add rows as li's into html - create one string
-                var str = parseNamesRow(row);
-                var responseData = html.toString().replace("{{PERSON}}", str);
-                console.log(responseData);
-                resolve(responseData);
+                parseNamesRow(row)
+                    .then(data => {
+                        var responseData = html.toString().replace("{{PERSON}}", data);
+                        resolve(responseData);
+                    });
             }
         });
     });
 }
 
 function parseNamesRow(row){
-    var str = "";
-    console.log(row);
-    str += "<p>";
-    str += row.primary_name + " - ";
-    str += row.birth_year + " - ";
-    str += (row.death_year || "Present");
-    str += row.primary_professions;
-    str += "</p>";
-    return str;
+    // Will have to make another query to get known_for_titles
+    var titles = row.known_for_titles.split(',');
+    var query = 'SELECT * FROM Titles WHERE tconst=\'' + titles[0] + '\'';
+    for (i = 0; i < titles.length; i++){
+        query += ' OR tconst=\'' + titles[i] + '\'';
+    }
+    query += ';';
+
+    var db = new sqlite3.Database("imdb.sqlite3", sqlite3.OPEN_READONLY);
+    return new Promise((resolve, reject) => {
+        db.all(query, function(err, titleRows) {
+            if (err) {
+                reject(err);
+            } else {
+                // on query success -> we can create our html string with known_for_movies
+                var str = "";
+                //console.log(row);
+                str += "<p>";
+                str += row.primary_name + " - ";
+                str += row.birth_year + " - ";
+                str += (row.death_year || "Present");
+                str += " - " + row.primary_profession;
+                str += "</p>";
+                str += "<ul> Known for Titles:";
+                for (i=0; i < titleRows.length; i++){
+                    str += "<li> " + titleRows[i].primary_title + " </li>";
+                }
+                str += "</ul>";
+                resolve(str);
+            }
+        });
+    });
 }
 
 module.exports = {};

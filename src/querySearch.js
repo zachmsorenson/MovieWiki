@@ -4,14 +4,15 @@ var sqlite3 = require('sqlite3');
 function generateResponse(html, search, selection){
     //Remove all instances of (, ), and ; (do we need to remove quotes too?)
     search = search.replace(/[();]/g, '');
+    search = search.replace(/[*]/g, '%');
     console.log("html is " + html);
     console.log('search is:' + search);
 
     //We can create the query and send it to SQL
     if (selection === 'Titles'){
-        var query = 'SELECT * FROM ' + selection + ' WHERE primary_title=\"' + search + '\";';
+        var query = 'SELECT * FROM ' + selection + ' WHERE primary_title LIKE \"' + search + '\";';
     }else if (selection === 'Names'){
-        var query = 'SELECT * FROM ' + selection + ' WHERE primary_name=\"' + search + '\";';
+        var query = 'SELECT * FROM ' + selection + ' WHERE primary_name LIKE \"' + search + '\";';
     }
 
     console.log('Query: ' + query);
@@ -26,11 +27,11 @@ function generateResponse(html, search, selection){
             } else {
                 // on query success -> add rows as li's into html - create one string
                 if (selection === 'Titles'){
-                    var str = parseTitlesRows(html, rows);
+                    var str = parseTitlesRows(rows);
                 } else if (selection === 'Names') {
-                    var str = parseNamesRows(html, rows);
+                    var str = parseNamesRows(rows);
                 }
-                var responseData = html.toString().replace("{{RESULT}}", str);
+                var responseData = html.toString().replace("{{RESULTS}}", str);
                 console.log(responseData);
                 resolve(responseData);
             }
@@ -38,11 +39,12 @@ function generateResponse(html, search, selection){
     });
 }
 
-function parseTitlesRows(html, rows) {
+function parseTitlesRows(rows) {
     var str = "";
     var template = 
     rows.forEach(function (row) {
-        str
+        str += "<li>";
+        str += "<a href='/people.html?id=" + row.tconst + "\'>";
         str += row.primary_title + " - ";
         str += row.title_type + " - ";
         str += row.start_year;
@@ -64,7 +66,7 @@ function parseNamesRows(rows){
         str += row.primary_name + " - ";
         str += row.birth_year + " - ";
         str += (row.death_year || "Present");
-        str += row.primary_profession;
+        str += " - " + row.primary_profession;
         str += "</a>";
         str += "</li>";
     });
