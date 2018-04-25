@@ -3,8 +3,9 @@
     <head>
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>TV/Movie Wiki Search</title>
-        <link rel="stylesheet" href="style.css"/>
+        <title>TV/Movie Search</title>
+        <link rel="stylesheet" href="css/style.css"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display|Roboto">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -13,9 +14,10 @@
 
     <body>
         <div id="header">
-            <h1>Search for a TV Show or Movie</h1>
+            <h1>TV/Movie Wiki</h1>
+            <h3>Find television shows, movies, actors/actresses, directors, etc.</h3>
             <form action="/search" enctype="multipart/form-data" method="GET">
-                Title: <input type="text" name="search">
+                Search: <input type="text" name="search">
                 <select name="selection">
                     <option value="Titles">Title</option>
                     <option value="Names">Person</option>
@@ -23,10 +25,15 @@
                 <input type="submit" value="Submit">
             </form>
         </div>
+
         <div id="resultsContainer" ng-app="resultsApp" ng-controller="resultsController">
             <ul id="resultsList" ng-repeat="for result in results">
                 <li>{{result}}</li>
             </ul>
+        </div>
+
+        <div class="footer">
+            <a href="about.html">About</a>
         </div>
     </body>
 </html>
