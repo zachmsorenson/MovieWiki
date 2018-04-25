@@ -18,7 +18,7 @@ function generateResponse(html, search, selection){
 
     // Query the database
     var objArray = [];
-    var db = new sqlite3.Database("testDB.db", sqlite3.OPEN_READONLY);
+    var db = new sqlite3.Database("imdb.sqlite3", sqlite3.OPEN_READONLY);
     return new Promise((resolve, reject) => {
         db.all(query, function(err, rows){
             if(err){
@@ -26,9 +26,9 @@ function generateResponse(html, search, selection){
             } else {
                 // on query success -> add rows as li's into html - create one string
                 if (selection === 'Titles'){
-                    var str = parseTitlesRows(rows);
+                    var str = parseTitlesRows(html, rows);
                 } else if (selection === 'Names') {
-                    var str = parseNamesRows(rows);
+                    var str = parseNamesRows(html, rows);
                 }
                 var responseData = html.toString().replace("{{RESULT}}", str);
                 console.log(responseData);
@@ -38,15 +38,15 @@ function generateResponse(html, search, selection){
     });
 }
 
-function parseTitlesRows(rows){
+function parseTitlesRows(html, rows) {
     var str = "";
-    rows.forEach(function(row) {
-        str += "<li>";
-        str += "<a href=\'/titles.html?id=" + row.tconst + "\'>";
+    var template = 
+    rows.forEach(function (row) {
+        str
         str += row.primary_title + " - ";
         str += row.title_type + " - ";
         str += row.start_year;
-        if (row.end_year){
+        if (row.end_year) {
             str += " - " + row.end_year;
         }
         str += "</a>";
@@ -60,15 +60,11 @@ function parseNamesRows(rows){
     rows.forEach(function(row) {
         console.log(row);
         str += "<li>";
-        str += "<a href='/people.html?id='" + row.nconst + ">";
+        str += "<a href='/people.html?id=" + row.nconst + "\'>";
         str += row.primary_name + " - ";
         str += row.birth_year + " - ";
-        if (row.death_year){
-            str += row.death_year;
-        } else {
-            str += "Present";
-        }
-        str += row.primary_professions;
+        str += (row.death_year || "Present");
+        str += row.primary_profession;
         str += "</a>";
         str += "</li>";
     });
