@@ -112,11 +112,11 @@ select {
     list-style-type: square;
 }
 
-#resultsList a:link {
+ul li a:link {
     color: #007bff;
 }
 
-#resultsList a:hover {
+ul li a:hover {
     color: #6c757d;
 }
 

@@ -15,6 +15,7 @@ var port = 8025;
 
 app.use('/css', express.static(path.join(__dirname + '/public/css')));
 app.use('/js', express.static(path.join(__dirname + '/public/js')));
+app.use('/images', express.static(path.join(__dirname + '/public/images')));
 
 app.get('/', (req, res) => { //request to index page
     var req_url = url.parse(req.url);
@@ -23,6 +24,20 @@ app.get('/', (req, res) => { //request to index page
         if (err) {
             res.writeHead(404, {'Content-Type': 'text/plain'});
             res.write('Could not find file!');
+            res.end();
+        } else {
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            res.write(data);
+            res.end();
+        }
+    });
+});
+
+app.get('/about.html', (req, res) => {
+    fs.readFile('public/about.html', (err, data) => {
+        if (err) {
+            res.writeHead(404, {'Content-Type': 'text/plain'});
+            res.write('Could not find file');
             res.end();
         } else {
             res.writeHead(200, {'Content-Type': 'text/html'});
