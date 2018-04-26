@@ -23,17 +23,16 @@ function generateResponse(html, id) {
                 reject(err);
             } else {
                 // on query success -> add rows as li's into html - create one string
-                parseNamesRow(row)
+                parseNamesRow(html, row)
                     .then(data => {
-                        var responseData = html.toString().replace("{{PERSON}}", data);
-                        resolve(responseData);
+                        resolve(data);
                     });
             }
         });
     });
 }
 
-function parseNamesRow(row){
+function parseNamesRow(html, row){
     // Will have to make another query to get known_for_titles
     var titles = row.known_for_titles.split(',');
     var query = 'SELECT * FROM Titles WHERE tconst=\'' + titles[0] + '\'';
@@ -48,21 +47,18 @@ function parseNamesRow(row){
             if (err) {
                 reject(err);
             } else {
-                // on query success -> we can create our html string with known_for_movies
-                var str = "";
-                //console.log(row);
-                str += "<p>";
-                str += row.primary_name + " - ";
-                str += row.birth_year + " - ";
-                str += (row.death_year || "Present");
-                str += " - " + row.primary_profession;
-                str += "</p>";
-                str += "<ul> Known for Titles:";
+                var response = html.toString();
+                response = response.replace("{{NAME}}", row.primary_name);
+                response = response.replace("{{BIRTH_YEAR}}", row.birth_year);
+                response = response.replace("{{DEATH_YEAR}}", row.death_year || "Present");
+                response = response.replace("{{PROFESSIONS}}", row.primary_profession);
+                var known_for_html = "";
                 for (i=0; i < titleRows.length; i++){
-                    str += "<li> " + titleRows[i].primary_title + " </li>";
+                    known_for_html += "<li>" + titleRows[i].primary_title + "</li>";
                 }
-                str += "</ul>";
-                resolve(str);
+                response = response.replace("{{KNOWN_FOR}}",known_for_html);
+                response = response.replace("{{IMG}}", row.nconst);
+                resolve(response);
             }
         });
     });
