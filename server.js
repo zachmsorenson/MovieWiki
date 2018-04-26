@@ -11,6 +11,8 @@ var queryNames = require('./src/queryNames.js');
 var app = express();
 var port = 8025;
 
+app.use(express.static('public/css'));
+
 app.get('/', (req, res) => { //request to index page
     var req_url = url.parse(req.url);
     console.log(req_url);
@@ -101,5 +103,6 @@ app.get('/people.html', (req, res) => {
         });
     }
 });
+
 
 app.listen(port);

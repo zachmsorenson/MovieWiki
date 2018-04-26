@@ -1,5 +1,6 @@
 // Parse POST message and query database
 var sqlite3 = require('sqlite3');
+var GetPoster = require('./imdb_poster.js').GetPosterFromNameId;
 
 function generateResponse(html, id) {
     // get rid of any non numbers in id
@@ -52,6 +53,18 @@ function parseNamesRow(html, row){
                 response = response.replace("{{BIRTH_YEAR}}", row.birth_year);
                 response = response.replace("{{DEATH_YEAR}}", row.death_year || "Present");
                 response = response.replace("{{PROFESSIONS}}", row.primary_profession);
+
+                // start promise to get imagedata
+                var imglink = 'https://';
+                var promise = new Promise((resolve, reject) => {
+                    GetPoster(row.nconst, function(str, data){
+                        console.log(str);
+                        console.log(data);
+                        imglink += data.host + data.path;
+                        resolve(imglink);
+                    });
+                });
+
                 var known_for_html = "";
                 var link = "/titles.html?id="
                 for (i=0; i < titleRows.length; i++){
@@ -59,8 +72,12 @@ function parseNamesRow(html, row){
                         titleRows[i].primary_title + "</a></li>";
                 }
                 response = response.replace("{{KNOWN_FOR}}",known_for_html);
-                response = response.replace("{{IMG}}", row.nconst);
-                resolve(response);
+
+                // when imglink promise resolves, we can resolve the promise for the html page
+                promise.then(imglink => {
+                    response = response.replace("{{IMG}}", imglink);
+                    resolve(response);
+                });
             }
         });
     });
@@ -69,3 +86,11 @@ function parseNamesRow(html, row){
 module.exports = {};
 module.exports.generateResponse = generateResponse;
 module.exports.version = '0.0.0';
+
+//
+// GetPosterFromNameId(nconst, callback)
+// GetPosterFromTitleId(tconst, callback)
+// The callback should be a function with 1 parameter that holds the data for the poster image URL. Note that the data
+// is a JavaScript object with host and path - you will need to create the actual URL for the <img> src attribute. The
+// protocol (http:// or https://) should match that of your webpage. In the browser, this can be detected
+// // using window.location.protocol.

@@ -1,5 +1,6 @@
 // Parse POST message and query database
 var sqlite3 = require('sqlite3');
+var GetPoster = require('./imdb_poster.js').GetPosterFromTitleId;
 
 function generateResponse(html, id){
     // get rid of any non numbers in id
@@ -70,7 +71,17 @@ function parseTitleRow(html, row){
                 response = response.replace('{{TITLE_TYPE}}', row.title_type);
                 response = response.replace('{{START_YEAR}}', row.start_year);
                 response = response.replace('{{END_YEAR}}', row.end_year || "");
-                response = response.replace('{{IMG}}', row.tconst);
+
+                // start promise to get imgdata
+                var imglink = 'https://';
+                var promise = new Promise((resolve, reject) => {
+                    GetPoster(row.tconst, function(str, data){
+                        console.log(str);
+                        console.log(data);
+                        imglink += data.host + data.path;
+                        resolve(imglink);
+                    });
+                });
 
                 response = response.replace('{{RUNTIME_MINUTES}}', row.runtime_minutes);
                 response = response.replace('{{GENRES}}', row.genres);
@@ -83,7 +94,12 @@ function parseTitleRow(html, row){
                         nameRows[i].primary_name + "</a></li>";
                 }
                 response = response.replace('{{TOP_BILLED}}', top_billed);
-                resolve(response);
+
+                // when imglink promise resolves, we can resolve the promise for the html page
+                promise.then(imglink => {
+                    response = response.replace('{{IMG}}', imglink);
+                    resolve(response);
+                });
             }
         });
     });
