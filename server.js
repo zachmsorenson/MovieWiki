@@ -3,6 +3,7 @@ var express = require('express');
 var url = require('url');
 var fs = require('fs');
 var exec = require('child_process').exec;
+var path = require('path');
 
 var querySearch = require('./src/querySearch.js');
 var queryTitles = require('./src/queryTitles.js');
@@ -11,7 +12,9 @@ var queryNames = require('./src/queryNames.js');
 var app = express();
 var port = 8025;
 
-app.use(express.static('public/css'));
+
+app.use('/css', express.static(path.join(__dirname + '/public/css')));
+app.use('/js', express.static(path.join(__dirname + '/public/js')));
 
 app.get('/', (req, res) => { //request to index page
     var req_url = url.parse(req.url);

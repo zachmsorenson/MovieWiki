@@ -46,7 +46,7 @@ Crew:
 tconst (TEXT) - alphanumeric unique identifier of the title
 directors (TEXT) - list of directors (comma separated)
 writers (TEXT) - list of writers (comma separated)
-Ratings
+Ratings'tt1785572
 tconst (TEXT) - alphanumeric unique identifier of the title
 average_rating (REAL) - weighted average of all the individual user ratings
 num_votes (INTEGER) - number of votes the title has received
