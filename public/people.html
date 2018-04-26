@@ -2,7 +2,11 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <title>People</title>
+
+        <link rel="stylesheet" href="css/style.css"/>
     </head>
     <body>
         <div id="head">
@@ -12,10 +16,14 @@
             <img src="{{IMG}}"/>
         </div>
         <div id="know_for_container">
+            <p><b>Best Known For:</b></p>
             <ul id="known_for_list">
                 {{KNOWN_FOR}}
             </ul>
         </div>
         <button onclick="toggleEditOverlay()">Edit Page</button>
+        <div class="footer">
+            <a href="about.html">About</a>
+        </div>
     </body>
 </html>

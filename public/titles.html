@@ -6,29 +6,30 @@
 
         <title>Titles</title>
 
-        <link rel="stylesheet" href="/public/css/style.css"/>
+        <link rel="stylesheet" href="css/style.css"/>
     </head>
 
     <body>
-    <div id="head">
-        <h2>{{TITLE}}</h2>
-        <p>{{TITLE_TYPE}}</p>
-        <p>{{START_YEAR}} - {{END_YEAR}}</p>
-        <img src="{{IMG}}"/>
-    </div>
-    <div id="more_info">
-        <p>Runtime: {{RUNTIME_MINUTES}} minutes</p>
-        <p>Genres: {{GENRES}}</p>
-        <p>Avg Rating: {{AVERAGE_RATING}}</p>
-        <p>Votes: {{NUM_VOTES}}</p>
-    </div>
-    <div id="top_billed_container">
-        <ul id="top_billed_list">
-            {{TOP_BILLED}}
-        </ul>
-    </div>
-    <div class="footer">
-        <a href="about.html">About</a>
-    </div>
+        <div id="head">
+            <h2>{{TITLE}}</h2>
+            <p>{{TITLE_TYPE}}</p>
+            <p>{{START_YEAR}} - {{END_YEAR}}</p>
+            <img src="{{IMG}}"/>
+        </div>
+        <div id="more_info">
+            <p><b>Runtime:</b> {{RUNTIME_MINUTES}} minutes</p>
+            <p><b>Genres:</b> {{GENRES}}</p>
+            <p><b>Avg Rating:</b> {{AVERAGE_RATING}}</p>
+            <p><b>Votes:</b> {{NUM_VOTES}}</p>
+        </div>
+        <div id="top_billed_container">
+            <p><b>Top Billed and Directors/Writers:</b></p>
+            <ul id="top_billed_list">
+                {{TOP_BILLED}}
+            </ul>
+        </div>
+        <div class="footer">
+            <a href="about.html">About</a>
+        </div>
     </body>
 </html>

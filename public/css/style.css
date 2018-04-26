@@ -14,50 +14,32 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    margin: 0.2%;
-    padding: 0.2%;
     font-family: sans-serif;
     color: #343a40;
-    text-align: center;
 }
 
 h1 {
-    font-size: 4rem;
+    margin: 0.2%;
+    padding: 0.2%;
     border-bottom: #343a40 solid 1px;
+    font-size: 4rem;
+    text-align: center;
 }
 
 h2 {
+    margin: 0;
+    padding: 0;
     font-size: 2rem;
 }
 
 h3 {
+    margin: 0.2%;
+    padding: 0.2%;
     font-size: 2rem;
-}
-
-h4 {
-    font-weight: bold;
-    font-size: 2rem;
-}
-
-h5 {
-    font-style: italic;
-    font-size: 2rem;
-}
-
-h6 {
-    font-size: 1rem;
-}
-
-p {
-    margin: 0 10%;
-}
-
-form {
-    margin: 2%;
-    padding: 2%;
     text-align: center;
 }
 
+/** FOOTER **/
 .footer {
     position: fixed;
     left: 0;
@@ -77,4 +59,75 @@ form {
 
 a:hover, a:focus {
     color: #fff;
+}
+
+/** INDEX **/
+form {
+    margin: 2%;
+    padding: 1%;
+    text-align: center;
+}
+
+input[type=text] {
+    width: 40%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    background-color: #343a40;
+    border: none;
+    color: #fff;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+select {
+    width: 10%;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
+
+/** RESULTS, TITLES, PEOPLE **/
+#resultsContainer, #head, #more_info, #top_billed_container, #know_for_container {
+    margin: 1%;
+    padding: 1%;
+}
+
+/** POSTERS **/
+#head img {
+    margin: 0;
+    padding: 1%;
+    height: 30%;
+    width: auto;
+}
+
+/** LISTS **/
+#resultsList, #top_billed_list, #known_for_list {
+    list-style-type: square;
+}
+
+#resultsList a:link {
+    color: #007bff;
+}
+
+#resultsList a:hover {
+    color: #6c757d;
+}
+
+/** EDIT PERSON **/
+button {
+    background-color: #343a40;
+    border: none;
+    color: #fff;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+    float: right;
 }
