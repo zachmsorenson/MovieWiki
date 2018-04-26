@@ -18,7 +18,7 @@
             <h1>TV/Movie Wiki</h1>
             <h3>Find television shows, movies, actors/actresses, directors, etc.</h3>
             <form action="/search" enctype="multipart/form-data" method="GET">
-                Search: <input type="text" name="search">
+                <b>Search:</b> <input type="text" name="search">
                 <select name="selection">
                     <option value="Titles">Title</option>
                     <option value="Names">Person</option>
@@ -26,13 +26,6 @@
                 <input type="submit" value="Submit">
             </form>
         </div>
-
-        <div id="resultsContainer" ng-app="resultsApp" ng-controller="resultsController">
-            <ul id="resultsList" ng-repeat="for result in results">
-                <li>{{result}}</li>
-            </ul>
-        </div>
-
         <div class="footer">
             <a href="about.html">About</a>
         </div>
