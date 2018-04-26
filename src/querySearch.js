@@ -44,7 +44,7 @@ function parseTitlesRows(rows) {
     var template = 
     rows.forEach(function (row) {
         str += "<li>";
-        str += "<a href='/people.html?id=" + row.tconst + "\'>";
+        str += "<a href='/titles.html?id=" + row.tconst + "\'>";
         str += row.primary_title + " - ";
         str += row.title_type + " - ";
         str += row.start_year;

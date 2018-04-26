@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <div id="head">
-        <h2>{{NAME}}</h2>
-        <p>{{BIRTH_YEAR}} - {{DEATH_YEAR}}</p>
-        <p>{{PROFESSIONS}}</p>
-    </div>
-    <div>
-        <ul id="known_for">
-            {{KNOWN_FOR}}
-        </ul>
-    </div>
-    <img src="{{IMG}}"/>
-</body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+        <div id="head">
+            <h2>{{NAME}}</h2>
+            <p>{{BIRTH_YEAR}} - {{DEATH_YEAR}}</p>
+            <p>{{PROFESSIONS}}</p>
+            <img src="{{IMG}}"/>
+        </div>
+        <div id="know_for_container">
+            <ul id="known_for_list">
+                {{KNOWN_FOR}}
+            </ul>
+        </div>
+        <button onclick="toggleEditOverlay()">Edit Page</button>
+    </body>
 </html>

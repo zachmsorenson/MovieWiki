@@ -53,8 +53,10 @@ function parseNamesRow(html, row){
                 response = response.replace("{{DEATH_YEAR}}", row.death_year || "Present");
                 response = response.replace("{{PROFESSIONS}}", row.primary_profession);
                 var known_for_html = "";
+                var link = "/titles.html?id="
                 for (i=0; i < titleRows.length; i++){
-                    known_for_html += "<li>" + titleRows[i].primary_title + "</li>";
+                    known_for_html += "<li><a href=\'" + link + titleRows[i].tconst + '\'>' +
+                        titleRows[i].primary_title + "</a></li>";
                 }
                 response = response.replace("{{KNOWN_FOR}}",known_for_html);
                 response = response.replace("{{IMG}}", row.nconst);

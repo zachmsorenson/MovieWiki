@@ -63,25 +63,42 @@ app.get('/search', (req, res) => { //request to search page
     }
 });
 
-app.get('/titles', (req, res) => {
+app.get('/titles.html', (req, res) => {
     var req_url = url.parse(req.url);
     var id = req.query.id || "";
 
     if (!(id)) { // no id specified
 
     } else { // given id - do query and send back result
-
+        fs.readFile('public/titles.html', (err, data) => {
+            queryTitles.generateResponse(data, id)
+                .then(data => {
+                    //successfully queried database and received templated html for title page
+                    res.writeHead(200, {'Content-Type': 'text/html'});
+                    res.write(data);
+                    res.end();
+                });
+        });
     }
 });
 
-app.get('/people', (req, res) => {
+app.get('/people.html', (req, res) => {
     var req_url = url.parse(req.url);
     var id = req.query.id || "";
 
     if (!(id)) { // no id specified
 
     } else { // given id - do query and send back result
-
+        fs.readFile('public/people.html', (err, data) => {
+            queryNames.generateResponse(data, id)
+                .then(data => {
+                    //successfully queried database and received templated html for person page
+                    res.writeHead(200, {'Content-Type': 'text/html'});
+                    res.write(data);
+                    res.end();
+                })
+                .catch(error => console.log(error))
+        });
     }
 });
 

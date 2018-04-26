@@ -10,10 +10,25 @@
     </head>
 
     <body>
-        <h1>Title Results</h1>
-
-        <div class="footer">
-            <a href="about.html">About</a>
-        </div>
+    <div id="head">
+        <h2>{{TITLE}}</h2>
+        <p>{{TITLE_TYPE}}</p>
+        <p>{{START_YEAR}} - {{END_YEAR}}</p>
+        <img src="image?id={{IMG}}"/>
+    </div>
+    <div id="more_info">
+        <p>Runtime: {{RUNTIME_MINUTES}} minutes</p>
+        <p>Genres: {{GENRES}}</p>
+        <p>Avg Rating: {{AVERAGE_RATING}}</p>
+        <p>Votes: {{NUM_VOTES}}</p>
+    </div>
+    <div id="top_billed_container">
+        <ul id="top_billed_list">
+            {{TOP_BILLED}}
+        </ul>
+    </div>
+    <div class="footer">
+        <a href="about.html">About</a>
+    </div>
     </body>
 </html>
