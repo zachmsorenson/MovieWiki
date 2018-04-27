@@ -153,3 +153,7 @@ button {
     left: 25%;
     background-color: white;
 }
+
+.wait {
+    cursor: wait;
+}

@@ -29,7 +29,8 @@ function generateResponse(html, id){
     var db = new sqlite3.Database("imdb.sqlite3", sqlite3.OPEN_READONLY);
     return new Promise((resolve, reject) => {
         db.get(query, function(err, row){
-            if(err){
+            if(!row || err){
+                console.log('could not find title');
                 reject(err);
             } else {
                 console.log('successful query for title!');
@@ -49,10 +50,24 @@ function generateResponse(html, id){
 function parseTitleRow(html, row){
     // will have to make some kind of query to get some amount of people
     //var names = row.top_billed.split(',');
+
+    // get list of directors and writers from row - make sure we query for each one
+    // var directors = row.directors.split(',');
+    // var writers = row.writers.split(',');
+    // var combine = directors.concat(writers.filter(function (item) {
+    //     return directors.indexOf(item) < 0;
+    // }));
+    // var crew = combine.filter(function (item, pos) {return combine.indexOf(item) == pos})
+    // console.log(crew);
+
+    //crew is array of nconsts - make sure we explicitly search for each one
+
     var query = 'SELECT Names.nconst, Names.primary_name, Principals.category FROM Titles JOIN ' +
         'Principals ON Principals.tconst=Titles.tconst JOIN ' +
         'Names ON Names.nconst=Principals.nconst WHERE ' +
-        'Titles.tconst=\'' + row.tconst + '\';';
+        'Titles.tconst=\'' + row.tconst + '\' ';
+        'ORDER BY Principals.ordering;';
+
     console.log(row);
     console.log(query);
     var db = new sqlite3.Database("imdb.sqlite3", sqlite3.OPEN_READONLY);
@@ -88,6 +103,8 @@ function parseTitleRow(html, row){
                 response = response.replace('{{GENRES}}', row.genres);
                 response = response.replace('{{AVERAGE_RATING}}', row.average_rating);
                 response = response.replace('{{NUM_VOTES}}', row.num_votes);
+
+
                 var top_billed = "";
                 var link = "/people.html?id="
                 for (i=0; i < nameRows.length; i++) {
@@ -95,6 +112,7 @@ function parseTitleRow(html, row){
                         nameRows[i].primary_name + "</a></li>";
                 }
                 response = response.replace('{{TOP_BILLED}}', top_billed);
+
 
                 // when imglink promise resolves, we can resolve the promise for the html page
                 promise.then(imglink => {

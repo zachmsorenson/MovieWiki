@@ -1,3 +1,22 @@
+//asynchronously load posters
+window.addEventListener('load', function(){
+    var allimages = document.getElementsByTagName('img');
+    for (var i=0; i<allimages.length; i++){
+        if (allimages[i].getAttribute('data-src')){
+            allimages[i].setAttribute('src', allimages[i].getAttribute('data-src'));
+        }
+    }
+}, false);
+
+function toggleLoadCursor(){
+    console.log('toggle cursor called');
+    var body = $('body');
+    if (body.css('cursor') == 'default' || body.css('cursor') == 'auto'){
+        body.css('cursor', 'wait');
+    } else {
+        body.css('cursor', 'auto');
+    }
+}
 
 function toggleEditOverlay(){
     var overlay = $('#edit_overlay');
