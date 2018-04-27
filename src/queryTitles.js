@@ -99,15 +99,17 @@ function parseTitleRow(html, row){
                 var imglink = 'https://';
                 console.log('making main promise');
                 newPromise = new Promise((resolve, reject) => {
-                    GetTitlePoster(row.tconst, function(str, data){
-                        console.log(str);
-                        console.log(data);
-                        imglink += data.host + data.path;
-                        resolve(imglink);
+                    GetTitlePoster(row, function(str, data){
+                        console.log('got data');
+                        var obj = {'str': str, 'data': data};
+                        resolve(obj);
                     });
-                }).then(imglink => {
+                }).then(obj => {
                     console.log('resolved main promise');
-                    response = response.replace('{{IMG}}', imglink);
+                    if (obj.data){
+                        imglink += obj.data.host + obj.data.path;
+                        response = response.replace('{{IMG}}', imglink);
+                    }
                 });
                 promiseArray.push(newPromise);
 

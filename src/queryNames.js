@@ -1,6 +1,7 @@
 // Parse POST message and query database
 var sqlite3 = require('sqlite3');
-var GetPoster = require('./imdb_poster.js').GetPosterFromNameId;
+var GetNamePoster = require('./imdb_poster.js').GetPosterFromNameId;
+var GetTitlePoster = require('./imdb_poster.js').GetPosterFromTitleId;
 
 function generateResponse(html, id) {
     // get rid of any non numbers in id
@@ -55,39 +56,81 @@ function parseNamesRow(html, row){
                 response = response.replace(/{{DEATH_YEAR}}/g, row.death_year || "Present");
                 response = response.replace("{{PROFESSIONS}}", row.primary_profession);
 
+                var promiseArray = [];
+                var newPromise;
                 // start promise to get imagedata
                 var imglink = 'https://';
-                var promise = new Promise((resolve, reject) => {
-                    GetPoster(row.nconst, function(str, data){
-                        if (!str){
-                            imglink += data.host + data.path;
-                            resolve(imglink);
-                        } else {
-                            resolve(null);
-                        }
+                newPromise = new Promise((resolve, reject) => {
+                    console.log('main poster request');
+                    console.log(row);
+                    GetNamePoster(row, function(str, data){
+                        console.log('got data');
+                        console.log(data);
+                        var obj = {'str': str, 'data': data};
+                        resolve(obj);
                     });
-                });
-
-                var known_for_html = "";
-                var link = "/titles.html?id="
-                for (i=0; i < titleRows.length; i++){
-                    known_for_html += "<li><a href=\'" + link + titleRows[i].tconst + '\'>' +
-                        titleRows[i].primary_title + "</a></li>";
-                }
-                response = response.replace("{{KNOWN_FOR}}",known_for_html);
-
-                // when imglink promise resolves, we can resolve the promise for the html page
-                promise.then(imglink => {
-                    if (imglink){
-                        console.log('fell in if');
-                        response = response.replace("{{IMG}}", imglink);
-                        resolve(response);
-                    } else {
-                        console.log('fell in else');
-                        response = response.replace("{{IMG}}", "images/default.png");
-                        resolve(response);
+                }).then(obj => {
+                    console.log('resolved main promise');
+                    console.log(obj);
+                    if (obj.data){
+                        imglink += obj.data.host + obj.data.path;
+                        response = response.replace('{{IMG}}', imglink);
                     }
                 });
+                promiseArray.push(newPromise);
+
+
+                //start known_for
+                var known_for = "";
+                var link = "/titles.html?id=";
+                for (i=0; i < titleRows.length; i++) {
+                    // get request for poster data - inside promise
+                    console.log('making a promise');
+                    newPromise = new Promise((resolve, reject) => {
+                        GetTitlePoster(titleRows[i], function(str, data){
+                            console.log('got data');
+                            var obj = {'str': str, 'data': data};
+                            resolve(obj);
+                        });
+                    }).then(obj => {
+                        console.log(obj);
+                        var data = obj.data;
+                        var str = obj.str;
+                        console.log('checkpoint a');
+                        if (!str){
+                            known_for += "<li class='list-card'><a href=\'" + link + data.row.tconst + '\'>' +
+                                data.row.primary_title + "</a>";
+                            known_for += "<img src=\"images/default-poster.jpeg\" data-src=\"https://" + data.host + data.path + "\"/>"
+                        } else {
+                            known_for += "<li>Title not found</li>";
+                        }
+                        console.log('checkpoint b');
+                        known_for += "</li>";
+                        console.log(promiseArray);
+                    });
+                    promiseArray.push(newPromise);
+                }
+
+                // we have our array of promises - on when all resolve then we can resolve(response)
+                console.log(promiseArray);
+                Promise.all(promiseArray).then(values => {
+                    console.log('resolved all promises');
+                    console.log(values);
+                    response = response.replace('{{KNOWN_FOR}}', known_for);
+                    resolve(response);
+                });
+                // // when imglink promise resolves, we can resolve the promise for the html page
+                // promise.then(imglink => {
+                //     if (imglink){
+                //         console.log('fell in if');
+                //         response = response.replace("{{IMG}}", imglink);
+                //         resolve(response);
+                //     } else {
+                //         console.log('fell in else');
+                //         response = response.replace("{{IMG}}", "images/default.png");
+                //         resolve(response);
+                //     }
+                // });
             }
         });
     });

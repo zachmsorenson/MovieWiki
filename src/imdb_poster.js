@@ -39,7 +39,8 @@ function GetPosterFromNameId(row, callback) {
 
 }
 
-function GetPosterFromTitleId(title_id, callback) {
+function GetPosterFromTitleId(row, callback) {
+    var title_id = row.tconst;
     var req_url = {
         host: 'www.imdb.com',
         path: '/title/' + title_id + '/'
@@ -56,7 +57,7 @@ function GetPosterFromTitleId(title_id, callback) {
             var poster_end_pos = body.indexOf('"', poster_src_pos);
             var poster_url = url.parse(body.substring(poster_src_pos, poster_end_pos));
             if (poster_url.host !== null)
-                callback && callback(null, {host: poster_url.host, path: poster_url.pathname});
+                callback && callback(null, {host: poster_url.host, path: poster_url.pathname, row: row});
             else
                 callback && callback('poster not found', null);
         });
