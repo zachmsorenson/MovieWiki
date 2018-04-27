@@ -7,6 +7,8 @@
         <title>Titles</title>
 
         <link rel="stylesheet" href="css/style.css"/>
+        <script src="js/jquery.js"></script>
+        <script src="js/titles.js"></script>
     </head>
 
     <body>
@@ -28,6 +30,15 @@
                 {{TOP_BILLED}}
             </ul>
         </div>
+
+        <button onclick="toggleEditOverlay()">Edit Page</button>
+        <div id="edit_overlay">
+            <div id="edit_box">
+
+                <button onclick="toggleEditOverlay()">Cancel</button>
+            </div>
+        </div>
+
         <div class="footer">
             <a href="about.html">About</a>
         </div>
