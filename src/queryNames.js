@@ -49,19 +49,22 @@ function parseNamesRow(html, row){
                 reject(err);
             } else {
                 var response = html.toString();
+                response = response.replace('{{ID}}', row.nconst);
                 response = response.replace("{{NAME}}", row.primary_name);
-                response = response.replace("{{BIRTH_YEAR}}", row.birth_year);
-                response = response.replace("{{DEATH_YEAR}}", row.death_year || "Present");
+                response = response.replace(/{{BIRTH_YEAR}}/g, row.birth_year);
+                response = response.replace(/{{DEATH_YEAR}}/g, row.death_year || "Present");
                 response = response.replace("{{PROFESSIONS}}", row.primary_profession);
 
                 // start promise to get imagedata
                 var imglink = 'https://';
                 var promise = new Promise((resolve, reject) => {
                     GetPoster(row.nconst, function(str, data){
-                        console.log(str);
-                        console.log(data);
-                        imglink += data.host + data.path;
-                        resolve(imglink);
+                        if (!str){
+                            imglink += data.host + data.path;
+                            resolve(imglink);
+                        } else {
+                            resolve(null);
+                        }
                     });
                 });
 
@@ -75,8 +78,15 @@ function parseNamesRow(html, row){
 
                 // when imglink promise resolves, we can resolve the promise for the html page
                 promise.then(imglink => {
-                    response = response.replace("{{IMG}}", imglink);
-                    resolve(response);
+                    if (imglink){
+                        console.log('fell in if');
+                        response = response.replace("{{IMG}}", imglink);
+                        resolve(response);
+                    } else {
+                        console.log('fell in else');
+                        response = response.replace("{{IMG}}", "images/default.png");
+                        resolve(response);
+                    }
                 });
             }
         });

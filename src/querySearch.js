@@ -1,7 +1,7 @@
 // Parse POST message and query database
 var sqlite3 = require('sqlite3');
 
-function generateResponse(html, search, selection){
+function generateResponse(html, search, selection, filter){
     //Remove all instances of (, ), and ; (do we need to remove quotes too?)
     search = search.replace(/[();]/g, '');
     search = search.replace(/[*]/g, '%');
@@ -10,9 +10,17 @@ function generateResponse(html, search, selection){
 
     //We can create the query and send it to SQL
     if (selection === 'Titles'){
-        var query = 'SELECT * FROM ' + selection + ' WHERE primary_title LIKE \"' + search + '\";';
+        var query = 'SELECT * FROM ' + selection + ' WHERE primary_title LIKE \"' + search + '\"';
+        if (filter) {
+            query += ' AND title_type=\'' + filter + '\'';
+        }
+        query += ';';
     }else if (selection === 'Names'){
-        var query = 'SELECT * FROM ' + selection + ' WHERE primary_name LIKE \"' + search + '\";';
+        var query = 'SELECT * FROM ' + selection + ' WHERE primary_name LIKE \"' + search + '\"';
+        if (filter) {
+            query += ' AND primary_profession LIKE \'%' + filter + '%\'';
+        }
+        query += ';';
     }
 
     console.log('Query: ' + query);

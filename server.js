@@ -8,11 +8,12 @@ var path = require('path');
 var querySearch = require('./src/querySearch.js');
 var queryTitles = require('./src/queryTitles.js');
 var queryNames = require('./src/queryNames.js');
+var updateTable = require('./src/updateTable.js').updateTable;
 
 var app = express();
 var port = 8025;
 
-
+app.use(express.json());
 app.use('/css', express.static(path.join(__dirname + '/public/css')));
 app.use('/js', express.static(path.join(__dirname + '/public/js')));
 app.use('/images', express.static(path.join(__dirname + '/public/images')));
@@ -52,6 +53,11 @@ app.get('/search', (req, res) => { //request to search page
     var req_url = url.parse(req.url);
     var selection = req.query.selection;
     var search = req.query.search || ""; // if search empty default to empty string
+    if (selection === "Titles"){
+        var filter = req.query.filter_title;
+    } else {
+        var filter = req.query.filter_name;
+    }
 
     if (!(selection)) { // query not specified
         fs.readFile('public/searchResults.html', (err, data) => {
@@ -67,7 +73,7 @@ app.get('/search', (req, res) => { //request to search page
         });
     } else { // do query, serve dynamic html
         fs.readFile('public/searchResults.html', (err, data) => {
-            querySearch.generateResponse(data, search, selection)
+            querySearch.generateResponse(data, search, selection, filter)
                 .then(data => {
                     // successfully queried data and received templated html - return data
                     res.writeHead(200, {'Content-Type': 'text/html'});
@@ -120,6 +126,19 @@ app.get('/people.html', (req, res) => {
                 .catch(error => console.log(error))
         });
     }
+});
+
+app.post('/update', (req, res) => {
+    var req_url = url.parse(req.url);
+    console.log(req_url);
+    console.log(req.body);
+    var table = req.body.table;
+    var column = req.body.column;
+    var value = req.body.value;
+    var id = req.body.id;
+    updateTable(table, column, value, id);
+
+
 });
 
 

@@ -67,6 +67,7 @@ function parseTitleRow(html, row){
             } else { // success on name queries
                 // put data into html template
                 var response = html.toString();
+                response = response.replace('{{ID}}', row.tconst);
                 response = response.replace('{{TITLE}}', row.primary_title);
                 response = response.replace('{{TITLE_TYPE}}', row.title_type);
                 response = response.replace('{{START_YEAR}}', row.start_year);

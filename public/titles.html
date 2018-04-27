@@ -12,15 +12,17 @@
     </head>
 
     <body>
+        <p id="const" style="display: none">{{ID}}</p>
+
         <div id="head">
             <h2>{{TITLE}}</h2>
-            <p>{{TITLE_TYPE}}</p>
+            <p id="page_title_type">{{TITLE_TYPE}}</p>
             <p>{{START_YEAR}} - {{END_YEAR}}</p>
             <img src="{{IMG}}"/>
         </div>
         <div id="more_info">
             <p><b>Runtime:</b> {{RUNTIME_MINUTES}} minutes</p>
-            <p><b>Genres:</b> {{GENRES}}</p>
+            <p><b>Genres:</b> <span id="page_genres">{{GENRES}}</span></p>
             <p><b>Avg Rating:</b> {{AVERAGE_RATING}}</p>
             <p><b>Votes:</b> {{NUM_VOTES}}</p>
         </div>
@@ -35,7 +37,37 @@
         <div id="edit_overlay">
             <div id="edit_box">
 
-                <button onclick="toggleEditOverlay()">Cancel</button>
+                <select id="title_type">
+                    <option value="movie">Movie</option>
+                    <option value="short">Short</option>
+                    <option value="tvSeries">TV Series</option>
+                    <option value="tvMovie">TV Movie</option>
+                    <option value="tvSpecial">TV Special</option>
+                    <option value="tvMiniSeries">TV Mini Series</option>
+                    <option value="videoGame">Video Game</option>
+                </select>
+                <button class="edit_button" onclick="postType()">Change Type</button>
+
+                <select id="genres" multiple>
+                    <option value="Action">Action</option>
+                    <option value="Adventure">Adventure</option>
+                    <option value="Animation">Animation</option>
+                    <option value="Biography">Biography</option>
+                    <option value="Comedy">Comedy</option>
+                    <option value="Documentary">Documentary</option>
+                    <option value="Drama">Drama</option>
+                    <option value="Family">Family</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Sci-Fi">Sci-Fi</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Superhero">Superhero</option>
+                    <option value="Thriller">Thriller</option>
+                    <option value="Mystery">Mystery</option>
+                </select>
+                <button class="edit_button" onclick="postGenres()">Change Genres</button><br>
+
+                <button class="edit_button" onclick="toggleEditOverlay()">Cancel</button>
             </div>
         </div>
 

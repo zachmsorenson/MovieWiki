@@ -7,13 +7,16 @@
         <title>People</title>
 
         <link rel="stylesheet" href="css/style.css"/>
-        <script src="jquery.js"></script>
+        <script src="js/jquery.js"></script>
+        <script src="js/people.js"></script>
     </head>
     <body>
+        <p id="const" style="display: none">{{ID}}</p>
+
         <div id="head">
             <h2>{{NAME}}</h2>
-            <p>{{BIRTH_YEAR}} - {{DEATH_YEAR}}</p>
-            <p>{{PROFESSIONS}}</p>
+            <p><span id="page_birth_year">{{BIRTH_YEAR}}</span> - <span id="page_death_year">{{DEATH_YEAR}}</span></p>
+            <p id="page_professions">{{PROFESSIONS}}</p>
             <img src="{{IMG}}"/>
         </div>
         <div id="know_for_container">
@@ -23,10 +26,30 @@
             </ul>
         </div>
 
-        <button onclick="toggleEditOverlay">Edit Page</button>
+        <button onclick="toggleEditOverlay()">Edit Page</button>
         <div id="edit_overlay">
             <div id="edit_box">
+                <input id="birth_year" type="number" value="{{BIRTH_YEAR}}"/>
+                <button class="edit_button" onclick="postBirth()">Change Birth</button><br>
 
+                <input id="death_year" type="number" value="{{DEATH_YEAR}}"/>
+                <button class="edit_button" onclick="postDeath()">Change Death</button><br>
+
+                <select id="professions" multiple>
+                    <option value="actor">Actor</option>
+                    <option value="actress">Actress</option>
+                    <option value="director">Director</option>
+                    <option value="writer">Writer</option>
+                    <option value="producer">Producer</option>
+                    <option value="cinematographer">Cinematographer</option>
+                    <option value="music_department">Music Department</option>
+                    <option value="soundtrack">Soundtrack</option>
+                    <option value="composer">Composer</option>
+                    <option value="miscellaneous">Miscellaneous</option>
+                </select>
+                <button class="edit_button" onclick="postProfessions()">Change Professions</button><br>
+
+                <button class="edit_button" onclick="toggleEditOverlay()">Cancel</button>
             </div>
         </div>
 

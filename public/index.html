@@ -10,7 +10,6 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-        <script src="listResults.js"></script>
     </head>
 
     <body>
@@ -19,9 +18,33 @@
             <h3>Find television shows, movies, actors/actresses, directors, etc.</h3>
             <form action="/search" enctype="multipart/form-data" method="GET">
                 <b>Search:</b> <input type="text" name="search">
-                <select name="selection">
+                <select id="selection" name="selection">
                     <option value="Titles">Title</option>
                     <option value="Names">Person</option>
+                </select>
+                Filter By:
+                <select id="filter_title" name="filter_title">
+                    <option value="""></option>
+                    <option value="movie">Movies</option>
+                    <option value="short">Shorts</option>
+                    <option value="tvSeries">TV Series</option>
+                    <option value="tvMovie">TV Movies</option>
+                    <option value="tvSpecial">TV Specials</option>
+                    <option value="tvMiniSeries">TV Mini Series</option>
+                    <option value="videoGame">Video Games</option>
+                </select>
+                <select id="filter_name" name="filter_name" style="display: none">
+                    <option value=""></option>
+                    <option value="actor">Actors</option>
+                    <option value="actress">Actresses</option>
+                    <option value="director">Directors</option>
+                    <option value="writer">Writers</option>
+                    <option value="producer">Producers</option>
+                    <option value="cinematographer">Cinematographers</option>
+                    <option value="music_department">Music Department</option>
+                    <option value="soundtrack">Soundtrack</option>
+                    <option value="composer">Composers</option>
+                    <option value="miscellaneous">Miscellaneous</option>
                 </select>
                 <input type="submit" value="Submit">
             </form>
@@ -29,5 +52,6 @@
         <div class="footer">
             <a href="about.html">About</a>
         </div>
+        <script src="js/search.js"></script>
     </body>
 </html>
