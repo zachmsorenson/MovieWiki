@@ -154,6 +154,21 @@ button {
     background-color: white;
 }
 
-.wait {
-    cursor: wait;
+.edit_field {
+    width: 10rem;
+}
+
+.list-card {
+    background-color: #dfdfdf;
+    width: 21.5rem;
+    padding: 4px;
+    margin: 4px;
+}
+
+.list-card a{
+    display: block;
+}
+
+.list-card img {
+    display: block;
 }

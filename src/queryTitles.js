@@ -1,6 +1,7 @@
 // Parse POST message and query database
 var sqlite3 = require('sqlite3');
-var GetPoster = require('./imdb_poster.js').GetPosterFromTitleId;
+var GetTitlePoster = require('./imdb_poster.js').GetPosterFromTitleId;
+var GetNamePoster = require('./imdb_poster.js').GetPosterFromNameId;
 
 function generateResponse(html, id){
     // get rid of any non numbers in id
@@ -87,36 +88,68 @@ function parseTitleRow(html, row){
                 response = response.replace('{{TITLE_TYPE}}', row.title_type);
                 response = response.replace('{{START_YEAR}}', row.start_year);
                 response = response.replace('{{END_YEAR}}', row.end_year || "");
-
-                // start promise to get imgdata
-                var imglink = 'https://';
-                var promise = new Promise((resolve, reject) => {
-                    GetPoster(row.tconst, function(str, data){
-                        console.log(str);
-                        console.log(data);
-                        imglink += data.host + data.path;
-                        resolve(imglink);
-                    });
-                });
-
                 response = response.replace('{{RUNTIME_MINUTES}}', row.runtime_minutes);
                 response = response.replace('{{GENRES}}', row.genres);
                 response = response.replace('{{AVERAGE_RATING}}', row.average_rating);
                 response = response.replace('{{NUM_VOTES}}', row.num_votes);
 
+                var promiseArray = [];
+                var newPromise;
+                // start promise to get main poster
+                var imglink = 'https://';
+                console.log('making main promise');
+                newPromise = new Promise((resolve, reject) => {
+                    GetTitlePoster(row.tconst, function(str, data){
+                        console.log(str);
+                        console.log(data);
+                        imglink += data.host + data.path;
+                        resolve(imglink);
+                    });
+                }).then(imglink => {
+                    console.log('resolved main promise');
+                    response = response.replace('{{IMG}}', imglink);
+                });
+                promiseArray.push(newPromise);
 
+                // start list posters
                 var top_billed = "";
                 var link = "/people.html?id="
                 for (i=0; i < nameRows.length; i++) {
-                    top_billed += "<li><a href=\'" + link + nameRows[i].nconst + '\'>' +
-                        nameRows[i].primary_name + "</a></li>";
+                    // get request for poster data - inside promise
+                    console.log('making a promise');
+                    newPromise = new Promise((resolve, reject) => {
+                        GetNamePoster(nameRows[i], function(str, data){
+                            console.log('got data');
+                            var obj = {'str': str, 'data': data};
+                            resolve(obj);
+                        });
+                    }).then(obj => {
+                        console.log(obj);
+                        var data = obj.data;
+                        var str = obj.str;
+                        console.log('checkpoint a');
+                        if (!str){
+                            top_billed += "<li class='list-card'><a href=\'" + link + data.row.nconst + '\'>' +
+                                data.row.primary_name + "</a>";
+                            top_billed += "<img src=\"images/default-poster.jpeg\" data-src=\"https://" + data.host + data.path + "\"/>"
+                        } else {
+                            top_billed += "<li>Person not found</li>";
+                            // top_billed += "<li><a href=\'" + link + data.row.nconst + '\'>' +
+                            //     data.row.primary_name + "</a>";
+                        }
+                        console.log('checkpoint b');
+                        top_billed += "</li>";
+                        console.log(promiseArray);
+                    });
+                    promiseArray.push(newPromise);
                 }
-                response = response.replace('{{TOP_BILLED}}', top_billed);
 
-
-                // when imglink promise resolves, we can resolve the promise for the html page
-                promise.then(imglink => {
-                    response = response.replace('{{IMG}}', imglink);
+                // we have our array of promises - on when all resolve then we can resolve(response)
+                console.log(promiseArray);
+                Promise.all(promiseArray).then(values => {
+                    console.log('resolved all promises');
+                    console.log(values);
+                    response = response.replace('{{TOP_BILLED}}', top_billed);
                     resolve(response);
                 });
             }

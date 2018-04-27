@@ -28,13 +28,15 @@
         <button onclick="toggleEditOverlay()">Edit Page</button>
         <div id="edit_overlay">
             <div id="edit_box">
-                <input id="birth_year" type="number" value="{{BIRTH_YEAR}}"/>
-                <button class="edit_button" onclick="postBirth()">Change Birth</button><br>
+                <input class='edit_field' id="birth_year" type="number" value="{{BIRTH_YEAR}}"/>
+                <button class="edit_button" onclick="postBirth()">Change Birth</button>
+                <br><br>
 
-                <input id="death_year" type="number" value="{{DEATH_YEAR}}"/>
-                <button class="edit_button" onclick="postDeath()">Change Death</button><br>
+                <input class="edit_field" id="death_year" type="number" value="{{DEATH_YEAR}}"/>
+                <button class="edit_button" onclick="postDeath()">Change Death</button>
+                <br><br>
 
-                <select id="professions" multiple>
+                <select class="edit_field" id="professions" multiple>
                     <option value="actor">Actor</option>
                     <option value="actress">Actress</option>
                     <option value="director">Director</option>
@@ -46,7 +48,8 @@
                     <option value="composer">Composer</option>
                     <option value="miscellaneous">Miscellaneous</option>
                 </select>
-                <button class="edit_button" onclick="postProfessions()">Change Professions</button><br>
+                <button class="edit_button" onclick="postProfessions()">Change Professions</button>
+                <br><br>
 
                 <button class="edit_button" onclick="toggleEditOverlay()">Cancel</button>
             </div>

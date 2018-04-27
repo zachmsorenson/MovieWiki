@@ -36,7 +36,7 @@
         <div id="edit_overlay">
             <div id="edit_box">
 
-                <select id="title_type">
+                <select class="edit_field" id="title_type">
                     <option value="movie">Movie</option>
                     <option value="short">Short</option>
                     <option value="tvSeries">TV Series</option>
@@ -46,8 +46,9 @@
                     <option value="videoGame">Video Game</option>
                 </select>
                 <button class="edit_button" onclick="postType()">Change Type</button>
+                <br><br>
 
-                <select id="genres" multiple>
+                <select class="edit_field" id="genres" multiple>
                     <option value="Action">Action</option>
                     <option value="Adventure">Adventure</option>
                     <option value="Animation">Animation</option>
@@ -64,7 +65,8 @@
                     <option value="Thriller">Thriller</option>
                     <option value="Mystery">Mystery</option>
                 </select>
-                <button class="edit_button" onclick="postGenres()">Change Genres</button><br>
+                <button class="edit_button" onclick="postGenres()">Change Genres</button>
+                <br><br>
 
                 <button class="edit_button" onclick="toggleEditOverlay()">Cancel</button>
             </div>
